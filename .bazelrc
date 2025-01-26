@@ -1,0 +1,6 @@
+# Enable Bzlmod for every Bazel command
+# Note (gdevillele): this may not be needed anymore (since bazel 8.0)
+common --enable_bzlmod
+
+# Allow empty for glob()
+# common --incompatible_disallow_empty_glob=false
