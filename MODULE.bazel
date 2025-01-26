@@ -1,0 +1,35 @@
+"""Module defining dependencies for the debug_bazel project."""
+
+module(
+    name = "debug_bazel",
+)
+
+# Global
+# -------------
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "rules_cc", version = "0.1.1")
+
+# macOS
+# -------------
+bazel_dep(name = "rules_apple", version = "3.18.0")
+
+# Android
+# -------------
+bazel_dep(name = "rules_android_ndk", version = "0.1.3")
+# -----------------------------
+# For development purposes
+# -----------------------------
+# local_path_override(
+#     module_name = "rules_android_ndk",
+#     path = "/Users/gaetan/projects/gdevillele/rules_android_ndk",
+# )
+
+# NOTE: I don't really understand this part. I just copied it from the "basic" example:
+# https://github.com/bazelbuild/rules_android_ndk/blob/main/examples/basic/MODULE.bazel
+android_ndk_repository_extension = use_extension(
+    "@rules_android_ndk//:extension.bzl",
+    "android_ndk_repository_extension",
+)
+use_repo(android_ndk_repository_extension, "androidndk")
+
+register_toolchains("@androidndk//:all")
