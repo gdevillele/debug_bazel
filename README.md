@@ -2,7 +2,7 @@
 
 **Context**
 
-I am trying to build a C++ library for Android using Bazel **8.0.1** on a 2021 Macbook Pro M1.
+I am trying to build a C++ library (libpng) using Bazel **8.0.1** on a 2021 Macbook Pro M1.
 
 **Environment variables**
 
@@ -27,13 +27,5 @@ bazel build //deps/lpng/src:png --platforms=//:android_x86_64
 Commands that works:
 
 ```bash
-bazel build //deps/lpng/src:png
-bazel build //deps/lpng/src:png --platforms=//:macos_arm64
-```
-
-Commands that don't work:
-
-```bash
-bazel build //deps/lpng/src:png-apple
-# bazel build //deps/lpng/src:png --platforms=//:macos_universal
+bazel build //deps/lpng/src:png --platforms=//:macos_universal
 ```
