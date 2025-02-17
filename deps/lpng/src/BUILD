@@ -1,28 +1,5 @@
-load("@rules_apple//apple:apple.bzl", "apple_static_library", "apple_static_xcframework")
 load("@rules_cc//cc:defs.bzl", "cc_library")
-
-apple_static_library(
-    name = "png-apple-library",
-    minimum_os_version = "13.0",
-    platform_type = "macos",
-    deps = [
-        ":png",
-    ],
-)
-
-apple_static_xcframework(
-    name = "png-apple-framework",
-    macos = [
-        "arm64",
-        "x86_64",
-    ],
-    minimum_os_versions = {
-        "macos": "13.0",
-    },
-    deps = [
-        ":png",
-    ],
-)
+# load("@emsdk//emscripten_toolchain:wasm_rules.bzl", "wasm_cc_binary")
 
 cc_library(
     name = "png",
