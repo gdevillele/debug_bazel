@@ -1,7 +1,17 @@
-load("@rules_cc//cc:defs.bzl", "cc_library")
-# load("@emsdk//emscripten_toolchain:wasm_rules.bzl", "wasm_cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@emsdk//emscripten_toolchain:wasm_rules.bzl", "wasm_cc_binary")
 
 cc_library(
+    name = "headers",
+    hdrs = [
+        "png.h",
+        "pngconf.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = ["@zlib//:zlib"],
+)
+
+cc_binary(
     name = "png",
     srcs = [
         "png.c",
@@ -24,41 +34,32 @@ cc_library(
         "pngwrite.c",
         "pngwtran.c",
         "pngwutil.c",
-    ] + select({
-        "@platforms//cpu:armv7": [
-            "arm/arm_init.c",
-            "arm/filter_neon.S",
-            "arm/filter_neon_intrinsics.c",
-            "arm/palette_neon_intrinsics.c",
-        ],
-        "@platforms//cpu:arm64": [
-            "arm/arm_init.c",
-            "arm/filter_neon.S",
-            "arm/filter_neon_intrinsics.c",
-            "arm/palette_neon_intrinsics.c",
-        ],
-        "@platforms//cpu:x86_32": [
-            "intel/filter_sse2_intrinsics.c",
-            "intel/intel_init.c",
-        ],
-        "@platforms//cpu:x86_64": [
-            "intel/filter_sse2_intrinsics.c",
-            "intel/intel_init.c",
-        ],
-        "//conditions:default": [],
-    }),
-    hdrs = [
-        "png.h",
-        "pngconf.h",
     ],
     includes = ["."],
     linkopts = [
-        "-lm",
-        "-lz",  # not sure this is needed
-    ] + select({
-        "@platforms//os:android": [],
-        "//conditions:default": [],
-    }),
+        "-s",
+        "FILESYSTEM=0",
+        "-s",
+        "ENVIRONMENT=web",
+        "-s",
+        "MINIMAL_RUNTIME=1",
+        # "-s",
+        # "LINKABLE=1",
+        "-s",
+        "EXPORTED_FUNCTIONS=[" +
+            "\"_png_create_png_struct\"" +
+        "]",
+        # "EXPORTED_FUNCTIONS=[\"_png_create_png_struct\"]",
+    ],
     visibility = ["//visibility:public"],
-    # deps = ["@zlib//:zlib"],
+    deps = [
+        ":headers",
+        "@zlib//:zlib"
+    ],
+)
+
+wasm_cc_binary(
+    name = "wasm",
+    cc_target = ":png",
+    visibility = ["//visibility:public"],
 )
