@@ -21,8 +21,6 @@ bazel build //deps/lpng/src:png --platforms=//:windows_x86_64
 
 ### macOS
 
-Commands that works:
-
 ```bash
 bazel build //deps/lpng/src:png --platforms=//:macos_arm64
 bazel build //deps/lpng/src:png --platforms=//:macos_x86_64
